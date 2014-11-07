@@ -6,10 +6,10 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("RoboticRainbowCatsPlatformer")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("RoboticRainbowCatsPlatformer")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyDescription("")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("7863c389-de8e-4f92-a1f3-9804136f5237")]
+[assembly: Guid("67f1b54a-a1a9-4d73-a1ab-9b8a1f49e3e5")]
 
 // Version information for an assembly consists of the following four values:
 //
