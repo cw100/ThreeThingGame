@@ -12,7 +12,7 @@ namespace RoboticRainbowCatsPlatformer
 {
     class Animation
     {
-        Texture2D spriteSheet;
+        public Texture2D spriteSheet;
         float time;
         float frameTime;
         int frameIndex;
@@ -23,7 +23,7 @@ namespace RoboticRainbowCatsPlatformer
         Vector2 origin;
         Rectangle source;
         float angle;
-        Color color;
+        public Color color;
 
         public void LoadContent(ContentManager theContentManager, string textureName)
         {

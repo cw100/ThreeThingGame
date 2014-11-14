@@ -20,8 +20,10 @@ namespace RoboticRainbowCats
             spriteFont = spritefont;
             active= true;
         }
-        public void Update()
+        public void Update(KeyboardState keyboard)
         {
+
+            
             if (GamePad.GetState(PlayerIndex.One).IsConnected)
             {
                 var buttonList = new List<Buttons>()
@@ -40,9 +42,10 @@ namespace RoboticRainbowCats
 
                 foreach (var button in buttonList)
                 {
-                    if (GamePad.GetState(PlayerIndex.One).IsButtonDown(button))
+                    if (GamePad.GetState(PlayerIndex.One).IsButtonDown(button) || keyboard[Keys.Space] == KeyState.Down)
                         active = false;
                 }
+
             }
         }
         public void Draw(SpriteBatch spriteBatch)

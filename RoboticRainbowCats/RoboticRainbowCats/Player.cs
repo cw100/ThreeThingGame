@@ -89,7 +89,26 @@ namespace RoboticRainbowCats
             playerPosition += GamePad.GetState(playerNumber).ThumbSticks.Left  * playerSpeed *new Vector2(1,-1) * gametime.ElapsedGameTime.Milliseconds;
 
         }
-        public void Update(GameTime gametime,List<Rectangle> rectangle)
+       public void KeyboardMove(GameTime gametime, KeyboardState keyboard )
+       {
+           if(keyboard[Keys.W] == KeyState.Down)
+           {
+           playerPosition.Y -= playerSpeed *(float)gametime.ElapsedGameTime.TotalMilliseconds;
+           }
+           if (keyboard[Keys.S] == KeyState.Down)
+           {
+               playerPosition.Y += playerSpeed * (float)gametime.ElapsedGameTime.TotalMilliseconds;
+           }
+           if (keyboard[Keys.D] == KeyState.Down)
+           {
+               playerPosition.X += playerSpeed * (float)gametime.ElapsedGameTime.TotalMilliseconds;
+           }
+           if (keyboard[Keys.A] == KeyState.Down)
+           {
+               playerPosition.X -= playerSpeed * (float)gametime.ElapsedGameTime.TotalMilliseconds;
+           }
+       }
+        public void Update(GameTime gametime,List<Rectangle> rectangle,KeyboardState keyboard)
         {
 
             width = playerAnimation.FrameWidth;
@@ -98,6 +117,7 @@ namespace RoboticRainbowCats
             
             previousPosition = playerPosition;
             ControllerMove(gametime);
+            KeyboardMove(gametime, keyboard);
             
             
 

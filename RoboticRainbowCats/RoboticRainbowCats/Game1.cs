@@ -77,7 +77,7 @@ namespace RoboticRainbowCats
         int numberOfPlayers = 4;
         bool running = false;
         Texture2D background;
-
+        KeyboardState keyboardState;
 
 
 
@@ -154,7 +154,7 @@ namespace RoboticRainbowCats
             endScreen=new EndScreen();
             menu = new Menu();
             logo = Content.Load<Texture2D>("Title.png");
-
+            keyboardState = new KeyboardState();
             AddWall();
             background = Content.Load<Texture2D>("Background.png");
                 playerOneRainbowList = new List<Rainbow>();
@@ -709,6 +709,8 @@ namespace RoboticRainbowCats
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+
+            keyboardState = Keyboard.GetState();
             if (running == true)
             {
                 frameRateCounter.Update(gameTime);
@@ -744,7 +746,7 @@ namespace RoboticRainbowCats
                 {
                     case 1:
 
-                        playerOne.Update(gameTime, wallHitBoxes);
+                        playerOne.Update(gameTime, wallHitBoxes,keyboardState);
 
                         
                         PlayerOneAddRainbow();
@@ -752,10 +754,10 @@ namespace RoboticRainbowCats
                         break;
                     case 2:
                         
-                            playerOne.Update(gameTime, wallHitBoxes);
+                            playerOne.Update(gameTime, wallHitBoxes,keyboardState);
 
 
-                            playerTwo.Update(gameTime, wallHitBoxes);
+                            playerTwo.Update(gameTime, wallHitBoxes,keyboardState);
                         
                         PlayerOneAddRainbow();
                             PlayerOneUpdateRainbow(gameTime);
@@ -764,10 +766,10 @@ namespace RoboticRainbowCats
                         break;
                     case 3:
                         
-                            playerOne.Update(gameTime, wallHitBoxes);
+                            playerOne.Update(gameTime, wallHitBoxes,keyboardState);
 
-                            playerTwo.Update(gameTime, wallHitBoxes);
-                            playerThree.Update(gameTime, wallHitBoxes);
+                            playerTwo.Update(gameTime, wallHitBoxes,keyboardState);
+                            playerThree.Update(gameTime, wallHitBoxes,keyboardState);
                         
                         PlayerOneAddRainbow();
                             PlayerOneUpdateRainbow(gameTime);
@@ -783,11 +785,11 @@ namespace RoboticRainbowCats
                         break;
                     case 4:
                         
-                            playerOne.Update(gameTime, wallHitBoxes);
+                            playerOne.Update(gameTime, wallHitBoxes,keyboardState);
 
-                            playerTwo.Update(gameTime, wallHitBoxes);
-                            playerThree.Update(gameTime, wallHitBoxes);
-                            playerFour.Update(gameTime, wallHitBoxes);
+                            playerTwo.Update(gameTime, wallHitBoxes,keyboardState);
+                            playerThree.Update(gameTime, wallHitBoxes,keyboardState);
+                            playerFour.Update(gameTime, wallHitBoxes,keyboardState);
                 
                 PlayerOneAddRainbow();
                         PlayerOneUpdateRainbow(gameTime);
@@ -808,7 +810,7 @@ namespace RoboticRainbowCats
                 BulletCollisionWall();
                 Collision();
             }
-            menu.Update();
+            menu.Update(keyboardState);
             if(menu.active == false&& endScreen.active== false)
             {
 
