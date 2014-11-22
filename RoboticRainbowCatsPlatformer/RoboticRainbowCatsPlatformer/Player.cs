@@ -23,6 +23,7 @@ namespace RoboticRainbowCatsPlatformer
         Vector2 lastPosition;
 
         public Rectangle testRectangle;
+        public List<Rectangle> testRectangles;
         public Rectangle bigHitBox;
         PlayerIndex playerNumber;
         float playerSpeed;
@@ -48,7 +49,16 @@ namespace RoboticRainbowCatsPlatformer
             Vector2 startposition, PlayerIndex playernumber,
             Vector2 jumpheight)
         {
-            testRectangle = new Rectangle(500, 900, 1920, 100);
+            testRectangles = new List<Rectangle>();
+            testRectangle = new Rectangle(400, 700, 100, 100);
+            
+            testRectangles.Add(testRectangle);
+            testRectangle = new Rectangle(200, 900, 100, 100);
+
+            testRectangles.Add(testRectangle);
+            testRectangle = new Rectangle(500, 700, 1000, 100);
+
+            testRectangles.Add(testRectangle);
 
             playerAnimation = new Animation();
             playerAnimation.Initialize(1, 1, startposition, 0f, Color.White);
@@ -137,7 +147,8 @@ namespace RoboticRainbowCatsPlatformer
         {
 
 
-            if (playerHitBox.Bottom >= collsionHitBox.Top && playerHitBox.Top < collsionHitBox.Top &&
+            if (playerHitBox.Left < collsionHitBox.Right && playerHitBox.Right > collsionHitBox.Left &&
+                playerHitBox.Bottom+ velocity.Y >= collsionHitBox.Top && playerHitBox.Top < collsionHitBox.Top &&
                         IsAboveAC(collsionHitBox,GetBottomRightCorner(playerHitBox)) &&
                         IsAboveDB(collsionHitBox, GetBottomLeftCorner(playerHitBox)))
             {
@@ -149,9 +160,10 @@ namespace RoboticRainbowCatsPlatformer
         public bool RectangleCollisionBottom(Rectangle playerHitBox, Rectangle collsionHitBox)
         {
 
-            if (playerHitBox.Top < collsionHitBox.Bottom && playerHitBox.Bottom > collsionHitBox.Bottom &&
-                    !IsOnUpperSideOfLine(GetTopLeftCorner(collsionHitBox), GetBottomRightCorner(collsionHitBox), GetCenter(playerHitBox)) &&
-                    !IsOnUpperSideOfLine(GetTopRightCorner(collsionHitBox), GetBottomLeftCorner(collsionHitBox), GetCenter(playerHitBox)))
+            if (playerHitBox.Left < collsionHitBox.Right && playerHitBox.Right > collsionHitBox.Left &&
+                playerHitBox.Top + velocity.Y <= collsionHitBox.Bottom && playerHitBox.Bottom > collsionHitBox.Bottom &&
+             !IsAboveAC(collsionHitBox, GetTopLeftCorner(playerHitBox)) &&
+                        !IsAboveDB(collsionHitBox, GetTopRightCorner(playerHitBox)))
             {
                 return true;
             }
@@ -161,9 +173,9 @@ namespace RoboticRainbowCatsPlatformer
         {
 
 
-            if (playerHitBox.Right > collsionHitBox.Left && playerHitBox.Left < collsionHitBox.Left  &&
-                    !IsOnUpperSideOfLine(GetTopLeftCorner(collsionHitBox), GetBottomRightCorner(collsionHitBox), GetCenter(playerHitBox)) &&
-                    IsOnUpperSideOfLine(GetTopRightCorner(collsionHitBox), GetBottomLeftCorner(collsionHitBox), GetCenter(playerHitBox)))
+            if (playerHitBox.Right +velocity.X> collsionHitBox.Left && playerHitBox.Left < collsionHitBox.Left  &&
+                   IsAboveDB(collsionHitBox, GetTopRightCorner(playerHitBox)) &&
+                        !IsAboveAC(collsionHitBox, GetBottomRightCorner(playerHitBox)))
             {
                 return true;
             }
@@ -171,9 +183,9 @@ namespace RoboticRainbowCatsPlatformer
         }
         public bool RectangleCollisionRight(Rectangle playerHitBox, Rectangle collsionHitBox)
         {
-            if (playerHitBox.Left < collsionHitBox.Right && playerHitBox.Right > collsionHitBox.Right &&
-                !IsOnUpperSideOfLine(GetTopLeftCorner(collsionHitBox), GetBottomRightCorner(collsionHitBox),GetCenter(playerHitBox)) &&
-                IsOnUpperSideOfLine(GetTopRightCorner(collsionHitBox), GetBottomLeftCorner(collsionHitBox),GetCenter(playerHitBox)))
+            if (playerHitBox.Left +velocity.X< collsionHitBox.Right && playerHitBox.Right > collsionHitBox.Right &&
+                IsAboveAC(collsionHitBox, GetTopLeftCorner(playerHitBox)) &&
+                        !IsAboveDB(collsionHitBox, GetBottomLeftCorner(playerHitBox)))
             {
                 return true;
             }
@@ -203,7 +215,7 @@ namespace RoboticRainbowCatsPlatformer
         }
         public bool IsOnUpperSideOfLine(Vector2 corner1, Vector2 oppositeCorner, Vector2 playerHitBoxCenter)
         {
-            return ((oppositeCorner.X - corner1.X) * (playerHitBoxCenter.Y - corner1.Y) - (oppositeCorner.Y - corner1.Y) * (playerHitBoxCenter.X - corner1.X)) > 0;
+            return ((oppositeCorner.X - corner1.X) * ((int)playerHitBoxCenter.Y - corner1.Y) - (oppositeCorner.Y - corner1.Y) * ((int)playerHitBoxCenter.X - corner1.X)) > 0;
         }
         
 
@@ -227,26 +239,54 @@ namespace RoboticRainbowCatsPlatformer
 
             bigHitBox.X = (int)(playerPosition.X - playerAnimation.frameWidth / 2);
             bigHitBox.Y = (int)(playerPosition.Y - playerAnimation.frameHeight / 2);
-            
-            
 
-            
-            if (RectangleCollisionTop(bigHitBox, testRectangle))
+
+            foreach (Rectangle testRectangle in testRectangles)
             {
-                playerPosition.Y = 900 - playerAnimation.frameHeight / 2;
-                velocity.Y = 0;
-                bigHitBox.X = (int)(playerPosition.X - playerAnimation.frameWidth / 2);
-                bigHitBox.Y = (int)(playerPosition.Y - playerAnimation.frameHeight / 2);
-                playerAnimation.color = Color.Red;
-                if (currentState != State.Jumping || currentState != State.Falling)
+                if (RectangleCollisionTop(bigHitBox, testRectangle))
                 {
-                    currentState = State.Standing;
+                    playerPosition.Y = testRectangle.Top - playerAnimation.frameHeight / 2;
+                    velocity.Y = 0;
+                    bigHitBox.X = (int)(playerPosition.X - playerAnimation.frameWidth / 2);
+                    bigHitBox.Y = (int)(playerPosition.Y - playerAnimation.frameHeight / 2);
+                    if (currentState != State.Jumping || currentState != State.Falling)
+                    {
+                        currentState = State.Standing;
+                    }
                 }
-            }
-            else
-            {
-                playerAnimation.color = Color.White;
 
+                if (RectangleCollisionBottom(bigHitBox, testRectangle))
+                {
+                    playerPosition.Y = testRectangle.Bottom + playerAnimation.frameHeight / 2;
+                    velocity.Y = 0;
+                    bigHitBox.X = (int)(playerPosition.X - playerAnimation.frameWidth / 2);
+                    bigHitBox.Y = (int)(playerPosition.Y - playerAnimation.frameHeight / 2);
+
+                }
+
+                if (RectangleCollisionLeft(bigHitBox, testRectangle))
+                {
+                    playerPosition.X = testRectangle.Left - playerAnimation.frameWidth / 2;
+                    velocity.X = 0;
+                    bigHitBox.X = (int)(playerPosition.X - playerAnimation.frameWidth / 2);
+                    bigHitBox.Y = (int)(playerPosition.Y - playerAnimation.frameHeight / 2);
+                    playerAnimation.color = Color.Red;
+
+                }
+                else
+                {
+                    playerAnimation.color = Color.White;
+
+                }
+
+                if (RectangleCollisionRight(bigHitBox, testRectangle))
+                {
+                    playerPosition.X = testRectangle.Right + playerAnimation.frameWidth / 2;
+                    velocity.X = 0;
+                    bigHitBox.X = (int)(playerPosition.X - playerAnimation.frameWidth / 2);
+                    bigHitBox.Y = (int)(playerPosition.Y - playerAnimation.frameHeight / 2);
+
+                }
             }
 
           

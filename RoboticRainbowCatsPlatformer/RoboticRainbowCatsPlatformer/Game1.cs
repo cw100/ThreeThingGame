@@ -109,7 +109,7 @@ namespace RoboticRainbowCatsPlatformer
             screenScale = new Vector3(scaleX, scaleY, 1.0f);
 
             globalGravity = new Vector2(0, 100f);
-            playerSpeed = 250f;
+            playerSpeed = 1000;
             playerJumpHeight = new Vector2(0, 400f);
             playerStartHealth = 100;
 
@@ -179,15 +179,13 @@ namespace RoboticRainbowCatsPlatformer
                 color[i] = Color.White;
             }
             rectangleTexture.SetData(color);
-            
-            spriteBatch.Draw(rectangleTexture, playerOne.testRectangle, Color.Black);
-
+            foreach(Rectangle testRectangle in playerOne.testRectangles)
+            {
+            spriteBatch.Draw(rectangleTexture, testRectangle, Color.Black);
+            }
             spriteBatch.Draw(rectangleTexture, playerOne.bigHitBox, Color.Green);
 
-            DrawLine(spriteBatch, //draw line
-                new Vector2(100, 1000), //start of line
-                new Vector2(2000, 810) //end of line
-            );
+            
             playerOne.Draw(spriteBatch);
 
 
